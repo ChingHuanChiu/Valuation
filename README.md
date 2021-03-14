@@ -1,5 +1,12 @@
 # valuation
 
+Created: Mar 14, 2021 6:24 PM
+Created By: 敬桓 邱
+Last Edited By: 敬桓 邱
+Last Edited Time: Mar 14, 2021 7:16 PM
+Status: In Review 👀
+Type: Project Kickoff 🚀
+
 # Overview
 
 There are two kinds of valuation method in valuation system, which are "Discount Cash Flow" and "Growth stock valuation", and use the estimate data from analysts on [Yahoo Finance](https://finance.yahoo.com/quote/AAPL/analysis?p=T) , such as 'Revenue', 'Growths' and 'EPS'
@@ -16,8 +23,4 @@ There are two kinds of valuation method in valuation system, which are "Discount
 
     where $PE_{estimate}$  is from a function of growth,   $PE_{estimate}=f(g)$
 
-     
-
-    ![valuation%200d95066d096c4a6790845df0865ea301/_2021-03-14_7.01.21.png](valuation%200d95066d096c4a6790845df0865ea301/_2021-03-14_7.01.21.png)
-
-# Future Wor
+    ![valuation%206af6ae5bd170453cba5d0acffc4324c6/image.jpg](valuation%206af6ae5bd170453cba5d0acffc4324c6/image.jpg)
