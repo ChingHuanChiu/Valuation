@@ -15,6 +15,4 @@ There are two kinds of valuation method in valuation system, which are "Discount
 
     ![image](https://latex.codecogs.com/png.latex?value%20=%20PE_{estimate}%20*%20EPS_{estimate})
 
-    where ![image](https://latex.codecogs.com/png.latex?PE_{estimate}) is from a function of growth,   ![image](https://latex.codecogs.com/png.latex?PE_{estimate}=f(g))
-
-    ![valuation%206af6ae5bd170453cba5d0acffc4324c6/image.jpg](valuation%206af6ae5bd170453cba5d0acffc4324c6/image.jpg)
+    where ![image](https://latex.codecogs.com/png.latex?PE_{estimate}) is from a function of growth,  ![image](https://latex.codecogs.com/png.latex?PE_{estimate}=f(g))
