@@ -1,6 +1,4 @@
-
 # valuation
-
 
 
 # Overview
@@ -18,7 +16,5 @@ There are two kinds of valuation method in valuation system, which are "Discount
     $value = PE_{estimate} * EPS_{estimate}$
 
     where $PE_{estimate}$  is from a function of growth,   $PE_{estimate}=f(g)$
-    
-    
-![image](https://user-images.githubusercontent.com/51486531/111066512-7ab05900-84fa-11eb-89ee-e750a70c7085.jpg)
-   
+
+    ![valuation%206af6ae5bd170453cba5d0acffc4324c6/image.jpg](valuation%206af6ae5bd170453cba5d0acffc4324c6/image.jpg)
