@@ -6,10 +6,10 @@ from utility import filter_extreme_case
 
 class Dcf:
 
-    def __init__(self, symbol):
-        super(Dcf, self).__init__()
+    def __init__(self, symbol, current_year, next_year, sales_growth_ave):
         self.s = symbol
         self.Data = Data(symbol)
+        self.current_year, self.next_year, self.sales_growth_ave = current_year, next_year, sales_growth_ave
 
     def _calculate_margin(self) -> (pd.Series, pd.Series):
         """
@@ -41,17 +41,17 @@ class Dcf:
          算出預期營收、預期NI、預期FCF
         """
         ave_FCF_margin, ave_profit_margin = self._calculate_margin()
-        current_year, next_year, sales_growth_ave = self.Data.get_predict_revenue_growth_eps()[0:3]
+        # current_year, next_year, sales_growth_ave = self.Data.get_predict_revenue_growth_eps()[0:3]
         hint = None
-        if sales_growth_ave == 'N/A':
-            sales_growth_ave = self._calculate_predict_revenue_growth_ratio()
+        if self.sales_growth_ave == 'N/A':
+            self.sales_growth_ave = self._calculate_predict_revenue_growth_ratio()
             hint = '沒有分析師預測，所以用過去平均營收成長率進行評價'
 
         # 4年的預期營收, 2年分析師預測加上2年推算
-        predict_rev_data = [current_year, next_year]
-        predict_rev = next_year
+        predict_rev_data = [self.current_year, self.next_year]
+        predict_rev = self.next_year
         for _ in range(2):
-            predict_rev = predict_rev * (1 + sales_growth_ave)
+            predict_rev = predict_rev * (1 + self.sales_growth_ave)
             predict_rev_data.append(predict_rev)
 
         # 4年的預期NI
@@ -72,7 +72,7 @@ class Dcf:
         if all(x > 0 for x in fcf):
             fcf = fcf
         else:
-            return 'There is a negative value in fcf'
+            return f'the DCF is not suitable for {self.s} '
 
         pv = (fcf / wacc).sum() + (terminal_fcf / wacc[-1])
         if out == 'N/A':
@@ -91,10 +91,10 @@ class Dcf:
 
 
 class GrowthValuation:
-    def __init__(self, ticker):
+    def __init__(self, ticker, growth_estimate):
         self.ticker = ticker
         self.Data = Data(ticker)
-        self.growth_estimate, self.eps_current_year_estimate = self.Data.get_predict_revenue_growth_eps()[3:5]
+        self.growth_estimate = growth_estimate
 
     def calculate_pe(self):
 
@@ -111,17 +111,31 @@ class GrowthValuation:
 
         return PE
 
-    def valuation(self):
+    def valuation(self, eps_current_year_estimate):
         PE = self.calculate_pe()
-        EPS = float(self.eps_current_year_estimate)
+        EPS = float(eps_current_year_estimate)
         price = PE * EPS
         return price
 
 
+class Valuation:
+    def __init__(self, ticker):
+        self.ticker = ticker
+        self.Data = Data(ticker)
+        self.current_year, self.next_year, self.sales_growth_ave, self.growth_estimate, self.eps_current_year_estimate \
+            = self.Data.get_predict_revenue_growth_eps()
+
+    def value(self):
+        dcf_value = Dcf(symbol=self.ticker, current_year=self.current_year, next_year=self.next_year,
+                        sales_growth_ave=self.sales_growth_ave).valuation(perpetual_growth=0.03, wacc_adj=-0.035)
+
+        growth_value = GrowthValuation(ticker=self.ticker, growth_estimate=self.growth_estimate).\
+            valuation(self.eps_current_year_estimate)
+
+        return {'DCF法:': f'{dcf_value}元', '成長型股票評價:': f'{growth_value}元'}
+
 
 if __name__ == '__main__':
-    # D = Dcf('MMM')
-    # pr = D.present_value_of_cf(perpetual_growth=0.03, wacc_adj=-0.03)
-    G = GrowthValuation('AAPL')
-    value = G.valuation()
+
+    res = Valuation('AAPL').value()
 
