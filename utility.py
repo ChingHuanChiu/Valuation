@@ -34,3 +34,13 @@ def filter_extreme_case(data: pd.Series, mul=3):
     return data
 
 
+def row_of_net_income(soup):
+
+    all_data: list = soup.find_all('div', {'data-test': 'fin-row'})
+
+    for i in range(len(all_data)):
+
+        if all_data[i].text.startswith('Net Income from Continuing Operation Net Minority Interest'):
+            row = i + 1
+            break
+    return row
