@@ -26,4 +26,4 @@ There are two kinds of valuation method in valuation system, which are "Discount
 # USAGE
 `res = Valuation('AAPL').value()`
 
-`res = {'DCF法:': '36.38元', '成長型股票評價:': '147.87200997549166元'}`
+`res = {'DCF法:': '177.5元', '成長型股票評價:': '147.42元'}`
