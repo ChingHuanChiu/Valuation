@@ -67,7 +67,7 @@ class Dcf:
         fcf = self.predict_data()[2]
 
         #終值
-        terminal_fcf = fcf[-1] * (1 + perpetual_growth) / ((wacc[-1] - 1) - perpetual_growth)
+        terminal_fcf = fcf[-1] * (1 + perpetual_growth) / ((wacc[0] - 1) - perpetual_growth)
         fcf = np.array(fcf)
         if all(x > 0 for x in fcf):
             fcf = fcf
@@ -132,6 +132,7 @@ class Valuation:
         growth_value = GrowthValuation(ticker=self.ticker, growth_estimate=self.growth_estimate).\
             valuation(self.eps_current_year_estimate)
 
+        dcf_value, growth_value = round(dcf_value, 2), round(growth_value, 2)
         return {'DCF法:': f'{dcf_value}元', '成長型股票評價:': f'{growth_value}元'}
 
 
