@@ -127,13 +127,13 @@ class Valuation:
 
     def value(self):
         dcf_value = Dcf(symbol=self.ticker, current_year=self.current_year, next_year=self.next_year,
-                        sales_growth_ave=self.sales_growth_ave).valuation(perpetual_growth=0.03, wacc_adj=-0.035)
+                        sales_growth_ave=self.sales_growth_ave).valuation(perpetual_growth=0.02, wacc_adj=-0.02)
 
         growth_value = GrowthValuation(ticker=self.ticker, growth_estimate=self.growth_estimate).\
             valuation(self.eps_current_year_estimate)
 
-        dcf_value, growth_value = round(dcf_value, 2), round(growth_value, 2)
-        return {'DCF法:': f'{dcf_value}元', '成長型股票評價:': f'{growth_value}元'}
+        if isinstance(dcf_value, float) and dcf_value > 0 : dcf_value = round(dcf_value, 2)
+        return {'DCF法:': f'{dcf_value}元', '成長型股票評價:': f'{round(growth_value, 2)}元'}
 
 
 if __name__ == '__main__':
