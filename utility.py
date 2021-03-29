@@ -44,3 +44,8 @@ def row_of_net_income(soup):
             row = i + 1
             break
     return row
+
+
+def amount_of_column(soup):
+    resp = soup.find_all('div', {'class': 'D(tbhg)'})[0].find_all('div', {'class': 'Ta(c)'})
+    return len(resp) - 1

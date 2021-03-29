@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from utility import transform_to_num, row_of_net_income
+from utility import transform_to_num, row_of_net_income, amount_of_column
 import pandas as pd
 import numpy as np
 import requests
@@ -88,10 +88,11 @@ class Crawler:
 
         income_soup = self._suop(url=income_url)
         cash_flow_soup = self._suop(url=cash_url)
-        revenue = [transform_to_num(self._income_selector(soup=income_soup, column=c, row=1)) * 0.001 for c in range(3, 7)]
+        columns = amount_of_column(income_soup)
+        revenue = [transform_to_num(self._income_selector(soup=income_soup, column=c, row=1)) * 0.001 for c in range(3, 3 + columns)]
         ni_row = row_of_net_income(income_soup)
-        ni = [transform_to_num(self._income_selector(soup=income_soup, column=c, row=ni_row)) * 0.001 for c in range(3, 7)]
-        fcf = [transform_to_num(self._cashflow_selector(soup=cash_flow_soup, column=c)) * 0.001 for c in range(3, 7)]
+        ni = [transform_to_num(self._income_selector(soup=income_soup, column=c, row=ni_row)) * 0.001 for c in range(3, 3 + columns)]
+        fcf = [transform_to_num(self._cashflow_selector(soup=cash_flow_soup, column=c)) * 0.001 for c in range(3, 3 + columns)]
         data = {'NI': ni, 'Sales/Revenue': revenue, 'FCF': fcf}
         return pd.DataFrame(data)
 
