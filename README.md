@@ -3,7 +3,7 @@
 
 # Overview
 
-There are two kinds of valuation method in valuation system, which are "Discount Cash Flow" and "Growth stock valuation" and use the estimate data from analysts on [Yahoo Finance](https://finance.yahoo.com/quote/AAPL/analysis?p=T) , such as 'Revenue', 'Growths' and 'EPS'
+There are two kinds of valuation method in valuation system, "Discount Cash Flow" and "Growth stock valuation" , using the estimate data from analysts on [Yahoo Finance](https://finance.yahoo.com/quote/AAPL/analysis?p=T) , such as 'Revenue', 'Growths' and 'EPS'
 
 - DCF
 
