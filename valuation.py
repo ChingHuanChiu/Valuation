@@ -1,7 +1,9 @@
 import pandas as pd
 import numpy as np
+import warnings
 from datagetter import Data
 from utility import filter_extreme_case
+warnings.simplefilter("ignore")
 
 
 class Dcf:
@@ -138,5 +140,5 @@ class Valuation:
 
 if __name__ == '__main__':
 
-    res = Valuation('AAPL').value()
+    res = Valuation('T').value()
 
