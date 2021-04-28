@@ -46,6 +46,17 @@ def row_of_net_income(soup):
     return row
 
 
+def row_of_fcf(soup):
+
+    all_data: list = soup.find_all('div', {'data-test': 'fin-row'})
+
+    for i in range(len(all_data)):
+
+        if all_data[i].text.startswith('Free Cash Flow'):
+            row = i + 1
+            break
+    return row
+
 def amount_of_column(soup):
     resp = soup.find_all('div', {'class': 'D(tbhg)'})[0].find_all('div', {'class': 'Ta(c)'})
     return len(resp) - 1

@@ -140,5 +140,5 @@ class Valuation:
 
 if __name__ == '__main__':
 
-    res = Valuation('T').value()
+    res = Valuation('TSLA').value()
 
