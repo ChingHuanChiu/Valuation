@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 
 def transform_to_num(raw_value):
@@ -25,34 +26,26 @@ def transform_to_num(raw_value):
     return value
 
 
-def filter_extreme_case(data: pd.Series, mul=3):
+def filter_extreme_case(data: pd.Series, std_mul=1):
     """
-    如果最大值超過其餘數值平均的3倍則刪除
+    remove the data if data greater than  'mean + std_mul * std' or  smaller than 'mean  std_mul * std'
     """
-    if data.max() >= pd.Series(sorted(data)[:-1]).mean() * mul:
-        data = data.drop(data.argmax())
-    return data
+
+    MEAN = data.mean()
+    STD = data.std()
+    pos_threshold, neg_threshold = MEAN + std_mul * STD, MEAN - std_mul * STD
+    position = np.where((pos_threshold * std_mul <= data.values) | (data.values >= neg_threshold * std_mul))[0]
+    res = data[position]
+
+    return res
 
 
-def row_of_net_income(soup):
-
+def row_of_report(soup, field):
     all_data: list = soup.find_all('div', {'data-test': 'fin-row'})
 
     for i in range(len(all_data)):
 
-        if all_data[i].text.startswith('Net Income from Continuing Operation Net Minority Interest'):
-            row = i + 1
-            break
-    return row
-
-
-def row_of_fcf(soup):
-
-    all_data: list = soup.find_all('div', {'data-test': 'fin-row'})
-
-    for i in range(len(all_data)):
-
-        if all_data[i].text.startswith('Free Cash Flow'):
+        if all_data[i].text.startswith(field):
             row = i + 1
             break
     return row

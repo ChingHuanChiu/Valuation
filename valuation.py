@@ -25,6 +25,7 @@ class Dcf:
 
         FCF_margin = fcf_income['FCF'] / fcf_income['NI']
         FCF_margin = filter_extreme_case(FCF_margin)
+
         FCF_margin_mean = FCF_margin.mean()
         return FCF_margin_mean, profit_margin_mean
 
@@ -71,6 +72,7 @@ class Dcf:
         #終值
         terminal_fcf = fcf[-1] * (1 + perpetual_growth) / ((wacc[0] - 1) - perpetual_growth)
         fcf = np.array(fcf)
+
         if all(x > 0 for x in fcf):
             fcf = fcf
         else:
@@ -140,5 +142,5 @@ class Valuation:
 
 if __name__ == '__main__':
 
-    res = Valuation('TSLA').value()
+    res = Valuation('DIS').value()
 

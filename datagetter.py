@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from utility import transform_to_num, row_of_net_income, amount_of_column, row_of_fcf
+from utility import transform_to_num, amount_of_column, row_of_report
 import pandas as pd
 import numpy as np
 import requests
@@ -76,7 +76,6 @@ class Crawler:
         sales_growth_current = transform_to_num(current_sales_growth)
         sales_growth_next = transform_to_num(next_sales_growth)
         sales_growth_ave = (sales_growth_current + sales_growth_next) * 0.5
-
         return current_year, next_year, sales_growth_ave, growth_estimate, eps_current_year_estimate
 
     def fcf_ni_rev(self):
@@ -90,8 +89,8 @@ class Crawler:
         cash_flow_soup = self._suop(url=cash_url)
         columns = amount_of_column(income_soup)
         revenue = [transform_to_num(self._income_selector(soup=income_soup, column=c, row=1)) * 0.001 for c in range(3, 3 + columns)]
-        ni_row = row_of_net_income(income_soup)
-        fcf_row = row_of_fcf(cash_flow_soup)
+        ni_row = row_of_report(income_soup, 'Net Income from Continuing Operation Net Minority Interest')
+        fcf_row = row_of_report(cash_flow_soup, 'Free Cash Flow')
         ni = [transform_to_num(self._income_selector(soup=income_soup, column=c, row=ni_row)) * 0.001 for c in range(3, 3 + columns)]
         fcf = [transform_to_num(self._cashflow_selector(soup=cash_flow_soup, column=c, row=fcf_row)) * 0.001 for c in range(3, 3 + columns)]
         data = {'NI': ni, 'Sales/Revenue': revenue, 'FCF': fcf}
