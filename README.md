@@ -29,4 +29,3 @@ There are two kinds of valuation method in valuation system, "Discount Cash Flow
 
 # TO DO 
 * fix the exchanange rate 
-* if the growth rate of fcf is negative, the method of FCF is not working
