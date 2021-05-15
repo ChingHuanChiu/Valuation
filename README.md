@@ -28,4 +28,6 @@ There are two kinds of valuation method in valuation system, "Discount Cash Flow
 
 
 # TO DO 
-* fix the exchanange rate 
+* fix the exchanange rate
+* add the warning signal if the margin ratio is decreasing
+ 
