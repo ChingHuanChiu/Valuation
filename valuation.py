@@ -25,7 +25,6 @@ class Dcf:
 
         FCF_margin = fcf_income['FCF'] / fcf_income['NI']
         FCF_margin = filter_extreme_case(FCF_margin)
-
         FCF_margin_mean = FCF_margin.mean()
         return FCF_margin_mean, profit_margin_mean
 
@@ -68,11 +67,9 @@ class Dcf:
         out, close, name = self.Data.get_out_close_name()
         wacc = self.Data.get_wacc(wacc_adj=wacc_adj)
         fcf = self.predict_data()[2]
-
         #終值
         terminal_fcf = fcf[-1] * (1 + perpetual_growth) / ((wacc[0] - 1) - perpetual_growth)
         fcf = np.array(fcf)
-
         if all(x > 0 for x in fcf):
             fcf = fcf
         else:
@@ -131,16 +128,15 @@ class Valuation:
 
     def value(self):
         dcf_value = Dcf(symbol=self.ticker, current_year=self.current_year, next_year=self.next_year,
-                        sales_growth_ave=self.sales_growth_ave).valuation(perpetual_growth=0.02, wacc_adj=-0.02)
+                        sales_growth_ave=self.sales_growth_ave).valuation(perpetual_growth=0.02, wacc_adj=0)
 
         growth_value = GrowthValuation(ticker=self.ticker, growth_estimate=self.growth_estimate).\
             valuation(self.eps_current_year_estimate)
-
         if isinstance(dcf_value, float) and dcf_value > 0 : dcf_value = round(dcf_value, 2)
         return {'DCF法:': f'{dcf_value}元', '成長型股票評價:': f'{round(growth_value, 2)}元'}
 
 
 if __name__ == '__main__':
 
-    res = Valuation('DIS').value()
+    res = Valuation('AMZN').value()
 

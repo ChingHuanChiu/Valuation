@@ -11,7 +11,8 @@ def transform_to_num(raw_value):
         value = raw_value.replace('B', '')
         value = float(value) * 1000
     elif 'M' in raw_value:
-        value = float(raw_value)
+        value = raw_value.replace('M', '')
+        value = float(value) * 100
 
     elif '(' in raw_value:
         value = raw_value.replace('(', '')

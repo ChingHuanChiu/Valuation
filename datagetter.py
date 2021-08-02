@@ -3,9 +3,10 @@ from utility import transform_to_num, amount_of_column, row_of_report
 import pandas as pd
 import numpy as np
 import requests
-import yfinance as yf
 import re
 import random
+import yahoo_fin.stock_info as si
+
 
 
 headers = [{'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -100,10 +101,10 @@ class Crawler:
         """
         get the price and outstandings from yahoo API the unit of outstanding is 'M'
         """
-        data = yf.Ticker(self.symbol)
-        out = data.info['sharesOutstanding']
+
+        out = si.get_quote_data(self.symbol)['sharesOutstanding']
         out = out / 1000000
-        close = data.history()['Close'][-1]
+        close = si.get_quote_table(self.symbol)['Previous Close']
         name = self.symbol
 
         return round(out), close, name
