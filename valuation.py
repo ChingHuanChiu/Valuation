@@ -128,7 +128,7 @@ class Valuation:
 
     def value(self):
         dcf_value = Dcf(symbol=self.ticker, current_year=self.current_year, next_year=self.next_year,
-                        sales_growth_ave=self.sales_growth_ave).valuation(perpetual_growth=0.02, wacc_adj=0)
+                        sales_growth_ave=self.sales_growth_ave).valuation(perpetual_growth=0.02, wacc_adj=0.01)
 
         growth_value = GrowthValuation(ticker=self.ticker, growth_estimate=self.growth_estimate).\
             valuation(self.eps_current_year_estimate)
@@ -138,5 +138,5 @@ class Valuation:
 
 if __name__ == '__main__':
 
-    res = Valuation('AMZN').value()
+    res = Valuation('VZ').value()
 
