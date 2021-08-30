@@ -16,7 +16,7 @@ There are two kinds of valuation method in valuation system, "Discount Cash Flow
     ![image](https://latex.codecogs.com/png.latex?value%20=%20PE_{estimate}%20*%20EPS_{estimate})
 
     where ![image](https://latex.codecogs.com/png.latex?PE_{estimate}) is  the function of growth rate, which is to find the relationship between "Growth" and "PE ratio, namely,
-    ![image](https://user-images.githubusercontent.com/51486531/111328633-5f378080-86a9-11eb-9758-5d580b48ef7b.png)
+    ![image](file:///Users/apple/Desktop/%E6%88%AA%E5%9C%96%202021-08-30%20%E4%B8%8B%E5%8D%8810.17.35.png)
     
     
 ![image](https://user-images.githubusercontent.com/51486531/111170186-a147c000-85de-11eb-842b-1bb81a704e24.jpg)
