@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 
-def transform_to_num(raw_value):
+def transform_to_num(raw_value) -> float:
     value = raw_value
     if '%' in raw_value:
         value = raw_value.replace('%', '')

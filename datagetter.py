@@ -1,11 +1,19 @@
+import re
+import random
+from typing import List, Dict, Union
+from collections import ChainMap
+
+
 from bs4 import BeautifulSoup
-from utility import transform_to_num, amount_of_column, row_of_report
 import pandas as pd
 import numpy as np
 import requests
-import re
-import random
+import asyncio
 import yahoo_fin.stock_info as si
+
+
+from utility import transform_to_num, amount_of_column, row_of_report
+
 
 
 
@@ -16,13 +24,14 @@ headers = [{'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit
 
 
 class Crawler:
-    def __init__(self, symbol):
+    def __init__(self, symbol) -> None:
         self.symbol = symbol
 
-    def wacc(self, wacc_adj):
+
+    async def wacc(self, wacc_adj) -> Dict[str, np.array]:
+        """crawl the wacc, besides you can adjust the wacc by wacc_adjust
         """
-        crawl the wacc, besides you can adjust the wacc by wacc_adjust
-        """
+
         url = f'https://www.gurufocus.com/term/wacc/{self.symbol}/WACC'
         resp = requests.get(url, headers=random.choice(headers))
         resp.encoding = 'utf-8'
@@ -41,9 +50,9 @@ class Crawler:
         for _ in range(3):
             wacc_new = wacc_new * (1 + wacc)
             wacc_list.append(wacc_new)
-        return np.array(wacc_list)
+        return {'wacc': np.array(wacc_list)}
 
-    def predict_revenue_growth_eps(self):
+    async def predict_revenue_growth_eps(self) -> Dict[str, float]:
         """
         從Yahoo抓分析師預期營收以及預期營收成長的資料，並將單位Billion轉成Million， 將 % 轉成數值
         """
@@ -77,9 +86,11 @@ class Crawler:
         sales_growth_current = transform_to_num(current_sales_growth)
         sales_growth_next = transform_to_num(next_sales_growth)
         sales_growth_ave = (sales_growth_current + sales_growth_next) * 0.5
-        return current_year, next_year, sales_growth_ave, growth_estimate, eps_current_year_estimate
+        return {'current_year': current_year, 'next_year': next_year, 'sales_growth_ave': sales_growth_ave, 
+                'growth_estimate': growth_estimate, 'eps_current_year_estimate': eps_current_year_estimate}
 
-    def fcf_ni_rev(self):
+
+    async def fcf_ni_rev(self) -> Dict[str, pd.DataFrame]:
         """
         Crawl the data from yahoo
         """
@@ -95,9 +106,9 @@ class Crawler:
         ni = [transform_to_num(self._income_selector(soup=income_soup, column=c, row=ni_row)) * 0.001 for c in range(3, 3 + columns)]
         fcf = [transform_to_num(self._cashflow_selector(soup=cash_flow_soup, column=c, row=fcf_row)) * 0.001 for c in range(3, 3 + columns)]
         data = {'NI': ni, 'Sales/Revenue': revenue, 'FCF': fcf}
-        return pd.DataFrame(data)
+        return {'fcf_ni_rev': pd.DataFrame(data)}
 
-    def outstanding_close_name(self):
+    async def outstanding_close_name(self) -> Dict[str, float]:
         """
         get the price and outstandings from yahoo API the unit of outstanding is 'M'
         """
@@ -107,22 +118,22 @@ class Crawler:
         close = round(si.get_quote_table(self.symbol)['Quote Price'],2)
         name = self.symbol
 
-        return round(out), close, name
+        return {'out': round(out), 'close': close, 'name':name}
 
-    def _suop(self, url):
+    def _suop(self, url) -> BeautifulSoup:
         resp = requests.get(url, headers=random.choice(headers))
         resp.encoding = 'utf-8'
         raw_html = resp.text
         soup = BeautifulSoup(raw_html, 'html.parser')
         return soup
 
-    def _income_selector(self, soup, column, row):
+    def _income_selector(self, soup, column, row) -> str:
         value = soup.select(f'#Col1-1-Financials-Proxy > section > div.Pos\(r\) >\
          div.W\(100\%\).Whs\(nw\).Ovx\(a\).BdT.Bdtc\(\$seperatorColor\) > div > div.D\(tbrg\) >\
           div:nth-of-type({row}) > div.D\(tbr\).fi-row.Bgc\(\$hoverBgColor\)\:h > div:nth-of-type({column}) > span')
         return value[0].text
 
-    def _cashflow_selector(self, soup, column, row):
+    def _cashflow_selector(self, soup, column, row) -> str:
         value = soup.select(f'#Col1-1-Financials-Proxy > section > div.Pos\(r\) >\
                div.W\(100\%\).Whs\(nw\).Ovx\(a\).BdT.Bdtc\(\$seperatorColor\) > div > div.D\(tbrg\) >\
                div:nth-of-type({row}) > div.D\(tbr\).fi-row.Bgc\(\$hoverBgColor\)\:h > div:nth-of-type({column}) > span')
@@ -134,15 +145,12 @@ class Data(Crawler):
     def __init__(self, symbol):
         super().__init__(symbol)
 
-    def get_wacc(self, wacc_adj):
-        return self.wacc(wacc_adj=wacc_adj)
+    async def get(self, wacc_adj):
+        tasks : List = [self.wacc(wacc_adj), self.predict_revenue_growth_eps(), self.outstanding_close_name(), self.fcf_ni_rev()]
+        data: List[Dict[str, Union[str, float]]] = await asyncio.gather(*tasks)
+        data = {**dict(ChainMap(*data))}
+        return data
+        
 
-    def get_predict_revenue_growth_eps(self):
-        return self.predict_revenue_growth_eps()
 
-    def get_out_close_name(self):
-        return self.outstanding_close_name()
 
-    def get_fcf_income(self) -> pd.DataFrame:
-
-        return self.fcf_ni_rev()
