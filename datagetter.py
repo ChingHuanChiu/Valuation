@@ -87,7 +87,7 @@ class Crawler:
         sales_growth_next = transform_to_num(next_sales_growth)
         sales_growth_ave = (sales_growth_current + sales_growth_next) * 0.5
         return {'current_year': current_year, 'next_year': next_year, 'sales_growth_ave': sales_growth_ave, 
-                'growth_estimate': growth_estimate, 'eps_current_year_estimate': eps_current_year_estimate}
+                'growth_estimate': growth_estimate, 'eps_current_year_estimate': float(eps_current_year_estimate)}
 
 
     async def fcf_ni_rev(self) -> Dict[str, pd.DataFrame]:

@@ -121,7 +121,6 @@ class GrowthValuation:
         PE = self.calculate_pe()
         EPS = eps_current_year_estimate
 
-        print(PE, EPS)
         price = PE * EPS
         return price
 
@@ -159,5 +158,5 @@ class Valuation:
 
 if __name__ == '__main__':
 
-    res = Valuation('T').value()
+    res = Valuation('T', 0.01).value()
 
