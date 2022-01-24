@@ -13,7 +13,7 @@ class Dcf:
         self.Data = Data(symbol)
         self.current_year, self.next_year, self.sales_growth_ave = current_year, next_year, sales_growth_ave
 
-    def _calculate_margin(self) -> (pd.Series, pd.Series):
+    def _calculate_margin(self):
         """
         算出過去平均 'Fcf / Ni' 與 'Ni/Rev'
         """
@@ -138,5 +138,5 @@ class Valuation:
 
 if __name__ == '__main__':
 
-    res = Valuation('VZ').value()
+    res = Valuation('T').value()
 

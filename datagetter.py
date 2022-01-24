@@ -104,7 +104,7 @@ class Crawler:
 
         out = si.get_quote_data(self.symbol)['sharesOutstanding']
         out = out / 1000000
-        close = si.get_quote_table(self.symbol)['Previous Close']
+        close = round(si.get_quote_table(self.symbol)['Quote Price'],2)
         name = self.symbol
 
         return round(out), close, name
