@@ -148,7 +148,6 @@ class Valuation:
                         sales_growth_ave=self.sales_growth_ave,
                         fcf_income=self.fcf_income,).valuation(perpetual_growth=0.02, wacc=self.wacc, out=self.outstadings, 
                                                                close=self.close)
-        print(self.wacc[0])
         growth_value = GrowthValuation(growth_estimate=self.growth_estimate, 
                                        wacc=self.wacc[0]).valuation(self.eps_current_year_estimate)
         
