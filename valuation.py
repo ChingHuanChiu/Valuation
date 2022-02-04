@@ -79,7 +79,7 @@ class Dcf:
         if all(x > 0 for x in fcf):
             fcf = fcf
         else:
-            return f'the DCF is not suitable for {self.s} '
+            return f'the DCF is not suitable  '
 
         pv = (fcf / wacc).sum() + (terminal_fcf / wacc[-1])
         if out == 'N/A':
@@ -157,5 +157,6 @@ class Valuation:
 
 if __name__ == '__main__':
 
-    res = Valuation('T', 0.01).value()
+    res = Valuation('CBT', 0.01).value()
+    print(res)
 
