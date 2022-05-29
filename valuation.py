@@ -157,6 +157,6 @@ class Valuation:
 
 if __name__ == '__main__':
 
-    res = Valuation('CBT', 0.01).value()
+    res = Valuation('T', 0.01).value()
     print(res)
 

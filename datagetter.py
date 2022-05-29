@@ -55,30 +55,31 @@ class Crawler:
     async def predict_revenue_growth_eps(self) -> Dict[str, float]:
         """
         從Yahoo抓分析師預期營收以及預期營收成長的資料，並將單位Billion轉成Million， 將 % 轉成數值
+#Col1-0-AnalystLeafPage-Proxy > section > table:nth-child(3) > tbody > tr:nth-child(3) > td:nth-child(4) 
         """
         url = f'https://finance.yahoo.com/quote/{self.symbol}/analysis'
         soup = self._suop(url=url)
 
         current_year = soup.select(
-            '#Col1-0-AnalystLeafPage-Proxy > section > table:nth-of-type(2) > tbody > tr:nth-of-type(3) > td:nth-of-type(4) > span')[
+            '#Col1-0-AnalystLeafPage-Proxy > section > table:nth-of-type(2) > tbody > tr:nth-of-type(3) > td:nth-of-type(4)')[
             0].text
         next_year = soup.select(
-            '#Col1-0-AnalystLeafPage-Proxy > section > table:nth-of-type(2) > tbody > tr:nth-of-type(3) > td:nth-of-type(5) > span')[
+            '#Col1-0-AnalystLeafPage-Proxy > section > table:nth-of-type(2) > tbody > tr:nth-of-type(3) > td:nth-of-type(5)')[
             0].text
         current_sales_growth = soup.select(
-            '#Col1-0-AnalystLeafPage-Proxy > section > table:nth-of-type(2) > tbody > tr:nth-of-type(6) > td:nth-of-type(4) > span')[
+            '#Col1-0-AnalystLeafPage-Proxy > section > table:nth-of-type(2) > tbody > tr:nth-of-type(6) > td:nth-of-type(4)')[
             0].text
         next_sales_growth = soup.select(
-            '#Col1-0-AnalystLeafPage-Proxy > section > table:nth-of-type(2) > tbody > tr:nth-of-type(6) > td:nth-of-type(5) > span')[
+            '#Col1-0-AnalystLeafPage-Proxy > section > table:nth-of-type(2) > tbody > tr:nth-of-type(6) > td:nth-of-type(5)')[
             0].text
 
         growth_estimate = soup.select(
             '#Col1-0-AnalystLeafPage-Proxy > section > table:nth-of-type(6) > tbody > tr:nth-of-type(5) > td:nth-of-type(2)')[0].text
         eps_current_year_estimate = soup.select('#Col1-0-AnalystLeafPage-Proxy > section > table:nth-of-type(4) > '
-                                                'tbody > tr:nth-of-type(1) > td:nth-of-type(4) > span'
+                                                'tbody > tr:nth-of-type(1) > td:nth-of-type(4)'
 
         )[0].text
-
+        print(eps_current_year_estimate)
         growth_estimate = transform_to_num(growth_estimate)
 
         current_year = transform_to_num(current_year)
@@ -88,7 +89,6 @@ class Crawler:
         sales_growth_ave = (sales_growth_current + sales_growth_next) * 0.5
         return {'current_year': current_year, 'next_year': next_year, 'sales_growth_ave': sales_growth_ave, 
                 'growth_estimate': growth_estimate, 'eps_current_year_estimate': float(eps_current_year_estimate)}
-
 
     async def fcf_ni_rev(self) -> Dict[str, pd.DataFrame]:
         """
